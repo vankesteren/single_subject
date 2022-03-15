@@ -7,13 +7,13 @@ mainfont: Arial
 monofont: Fira Code
 urlcolor: blue
 output:
+  pdf_document: 
+    latex_engine: xelatex
+    toc: true
   md_document:
     variant: gfm
     toc: true
     toc_depth: 1
-  pdf_document: 
-    latex_engine: xelatex
-    toc: true
 ---
 
 ```{r setup, include=FALSE}
@@ -28,7 +28,7 @@ The goal is to obtain an estimate of the treatment effect for this patient. I wi
 
 Over the course of this document, we will use the following packages:
 
-```{r pck, message=FALSE, warning=FALSE, echo=FALSE}
+```{r pck, message=FALSE, warning=FALSE}
 library(dplyr)          # for data manipulation
 library(ggplot2)        # for plotting
 library(brglm2)         # for penalized estimation
@@ -38,7 +38,7 @@ library(rstanarm)       # for Bayesian GLM
 library(bridgesampling) # for Bayes Factors
 ```
 
-I have simulated some example data for illustrative purposes. This data has three variables: the day of measurement (`treat`), the number of seizures on that day (`y`), and whether treatment was administered on that day (`treat`). A small sample of the data is shown below. The script that generates the data is found in `gen_dat.R` in this folder.
+I have simulated some example data for illustrative purposes. This data has three variables: the day of measurement (`day`), the number of seizures on that day (`y`), and whether treatment was administered on that day (`treat`). A small sample of the data is shown below. The script that generates the data is found in `gen_dat.R` in this folder.
 
 ```{r data}
 df <- readRDS("example_data.rds")
@@ -109,7 +109,7 @@ This means that the treatment is expected to reduce the seizure rate by a factor
 However, in this model we are making an assumption which does not necessarily hold: that of uncorrelated residuals. We are assuming that the seizure rates for each day are independent (conditional on treatment). This would be the case if this were a randomized controlled trial, but since this is a single-subject design we cannot make this assumption. For example, it could be the case that a high seizure rate on day 1 leads to a similarly high seizure rate on day 2. This would lead to "serial correlation" or "autocorrelation". As a result, we cannot trust the confidence interval or the p-values in this section. In the next section, I show how to compute standard errors which are robust to mild model misspecification of this type.
 
 ## Robust inference for the Poisson model
-Instead of using the default estimator for the standard errors, we will now estimate a type of standard error which is robust to heteroskedasticity and autocorrelation, the so-called "HAC" estimator[^1]. This is implemented in the `sandwich`package:
+Instead of using the default estimator for the standard errors, we will now estimate a type of standard error which is robust to heteroskedasticity and autocorrelation, the so-called "HAC" estimator[^1]. This is implemented in the `sandwich` package:
 
 [^1]: this is very common in econometrics, where researchers have to deal with such time-series and within-subject changes all the time!
 

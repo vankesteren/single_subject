@@ -16,6 +16,16 @@ inference.
 
 Over the course of this document, we will use the following packages:
 
+``` r
+library(dplyr)          # for data manipulation
+library(ggplot2)        # for plotting
+library(brglm2)         # for penalized estimation
+library(lmtest)         # for performing wald test
+library(sandwich)       # for standard error correction
+library(rstanarm)       # for Bayesian GLM
+library(bridgesampling) # for Bayes Factors
+```
+
 I have simulated some example data for illustrative purposes. This data
 has three variables: the day of measurement (`treat`), the number of
 seizures on that day (`y`), and whether treatment was administered on
